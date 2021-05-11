@@ -15,7 +15,7 @@
 class dockerapp_fusio  (
   $service_name = 'fusio',
   $version = '2.0.0',
-  $ports = '8080:8080',
+  $ports = '80:80',
 
   ){
 
