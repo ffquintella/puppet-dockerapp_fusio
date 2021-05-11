@@ -47,7 +47,7 @@ services:
     ports:
       - "<%= $ports %>"
     volumes:
-      - <%= $data_dir %>/public:/var/www/html/fusio/public
+      - <%= $data_dir %>/public/apps:/var/www/html/fusio/public/apps
 
   # Fusio system database
   mysql_fusio:
