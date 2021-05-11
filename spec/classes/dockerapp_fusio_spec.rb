@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'dockerapp_tyk' do
+describe 'dockerapp_fusio' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
@@ -8,7 +8,7 @@ describe 'dockerapp_tyk' do
       let(:params) do
         {
           version: '1.4.1',
-          service_name: 'tyk',
+          service_name: 'fusio',
         }
       end
 
