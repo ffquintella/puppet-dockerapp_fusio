@@ -20,7 +20,7 @@ version: '3'
 services:
   # Fusio container
   fusio:
-    image: fusio/fusio:v<%= $version %>
+    image: fusio/fusio:<%= $version %>
     environment:
       FUSIO_PROJECT_KEY: "<%= $project_key %>"
       FUSIO_HOST: "<%= $host %>"

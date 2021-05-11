@@ -14,7 +14,7 @@
 
 class dockerapp_fusio  (
   $service_name = 'fusio',
-  $version = '2.0.0',
+  $version = 'latest',
   $ports = '80:80',
   $host_name = 'apldc1vds0044.fgv.br',
   $project_key = '42eec18ffdbffc9fda6110dcc705d6ce',
