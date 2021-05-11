@@ -99,7 +99,7 @@ class dockerapp_fusio  (
     owner   => $dir_owner,
     group   => $dir_group,
   }
-  ->file{ "${conf_datadir}/public/app":
+  ->file{ "${conf_datadir}/public/apps":
     ensure  => directory,
     owner   => $dir_owner,
     group   => $dir_group,
