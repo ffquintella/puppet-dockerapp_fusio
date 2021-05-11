@@ -24,6 +24,7 @@ services:
     environment:
       FUSIO_PROJECT_KEY: "<%= $project_key %>"
       FUSIO_HOST: "<%= $host %>"
+      FUSIO_URL: "http://<%= $host %>"
       FUSIO_ENV: "<%= $env %>"
       FUSIO_DB_NAME: "<%= $db_name %>"
       FUSIO_DB_USER: "<%= $db_user %>"
