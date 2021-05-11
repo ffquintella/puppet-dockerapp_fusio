@@ -13,7 +13,11 @@ describe 'dockerapp_fusio' do
       end
 
       it { is_expected.to compile }
-
+      it { is_expected.to contain_file('/srv/application-data/fusio') }
+      it { is_expected.to contain_file('/srv/application-data/fusio/public') }
+      it { is_expected.to contain_file('/srv/application-data/fusio/public/apps') }
+      it { is_expected.to contain_file('/srv/application-data/fusio/public/customphp') }
+      it { is_expected.to contain_file('/srv/scripts/fusio') }
 
     end
   end

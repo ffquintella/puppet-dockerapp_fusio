@@ -35,8 +35,8 @@ class dockerapp_fusio  (
 
   include 'dockerapp'
 
-  $dir_owner = 0
-  $dir_group = 0
+  $dir_owner = 33
+  $dir_group = 33
 
   $data_dir = $::dockerapp::params::data_dir
   $config_dir = $::dockerapp::params::config_dir
@@ -104,6 +104,11 @@ class dockerapp_fusio  (
     owner   => $dir_owner,
     group   => $dir_group,
   }
+  ->file{ "${conf_datadir}/public/customphp":
+    ensure  => directory,
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
 
 
   file {"${conf_configdir}/docker-composer.yml":
@@ -111,6 +116,7 @@ class dockerapp_fusio  (
       'version'        => $version, 
       'ports'          => $ports, 
       'data_dir'       => $conf_datadir,
+      'scriptsdir'     => $conf_scriptsdir,
       'host'           => $host_name,
       'project_key'    => $project_key,
       'env'            => $env ,

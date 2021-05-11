@@ -15,6 +15,7 @@
         String $mysql_password = '61ad6c605975',
         String $mysql_database = 'fusio',
         String $data_dir,
+        String $scriptsdir,
 | -%>
 version: '3'
 services:
@@ -48,6 +49,9 @@ services:
       - "<%= $ports %>"
     volumes:
       - <%= $data_dir %>/public/apps:/var/www/html/fusio/public/apps
+      - <%= $data_dir %>/public/customphp:/var/www/html/fusio/public/customphp
+      - <%= $scriptsdir %>:/scripts
+
 
   # Fusio system database
   mysql_fusio:
