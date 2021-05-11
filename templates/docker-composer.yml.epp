@@ -1,0 +1,62 @@
+<%- |   String $version = '2.0.0',
+        String $ports = '8080:8080',
+        String $project_key = '42eec18ffdbffc9fda6110dcc705d6ce',
+        String $host = 'acme.com',
+        String $env = 'prod',
+        String $db_name = 'fusio',
+        String $db_user = 'fusio',
+        String $db_pw = '61ad6c605975',
+        String $db_host = 'mysql_fusio',
+        String $backend_user = 'demo',
+        String $backend_email = 'demo@fusio-project.org',
+        String $backend_pw = '75dafcb12c4f',
+        String $mysql_root_pw = '7f3e5186032a',
+        String $mysql_user = 'fusio',
+        String $mysql_password = '61ad6c605975',
+        String $mysql_database = 'fusio',
+        String $data_dir,
+| -%>
+version: '3'
+services:
+  # Fusio container
+  fusio:
+    image: fusio/fusio:v<%= $ports %>
+    environment:
+      FUSIO_PROJECT_KEY: "<%= $project_key %>"
+      FUSIO_HOST: "<%= $host %>"
+      FUSIO_ENV: "<%= $env %>"
+      FUSIO_DB_NAME: "<%= $db_name %>"
+      FUSIO_DB_USER: "<%= $db_user %>"
+      FUSIO_DB_PW: "<%= $db_pw %>"
+      FUSIO_DB_HOST: "<%= $db_host %>"
+      FUSIO_BACKEND_USER: "<%= $backend_user %>"
+      FUSIO_BACKEND_EMAIL: "<%= $backend_email %>"
+      FUSIO_BACKEND_PW: "<%= $backend_pw %>"
+      FUSIO_VERSION: "master"
+      PROVIDER_FACEBOOK_KEY: ""
+      PROVIDER_FACEBOOK_SECRET: ""
+      PROVIDER_GOOGLE_KEY: ""
+      PROVIDER_GOOGLE_SECRET: ""
+      PROVIDER_GITHUB_KEY: ""
+      PROVIDER_GITHUB_SECRET: ""
+      RECAPTCHA_KEY: ""
+      RECAPTCHA_SECRET: ""
+    links:
+      - mysql_fusio
+    ports:
+      - "<%= $ports %>"
+    volumes:
+      - <%= $data_dir %>/public:/var/www/html/fusio/public
+
+  # Fusio system database
+  mysql_fusio:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "<%= $mysql_root_pw %>"
+      MYSQL_USER: "<%= $mysql_user %>"
+      MYSQL_PASSWORD: "<%= $mysql_password %>"
+      MYSQL_DATABASE: "<%= $mysql_database %>"
+    volumes:
+      - <%= $data_dir %>/db:/var/lib/mysql
+
