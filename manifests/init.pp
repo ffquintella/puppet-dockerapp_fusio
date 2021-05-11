@@ -93,7 +93,19 @@ class dockerapp_fusio  (
     }
   }
 
- 
+  file{ "${conf_datadir}/public":
+    ensure  => directory,
+    require => File[$conf_datadir],
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
+  ->file{ "${conf_datadir}/public/app":
+    ensure  => directory,
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
+
+
   file {"${conf_configdir}/docker-composer.yml":
     content => epp('dockerapp_fusio/docker-composer.yml.epp', { 
       'version'        => $version, 
