@@ -16,6 +16,20 @@ class dockerapp_fusio  (
   $service_name = 'fusio',
   $version = '2.0.0',
   $ports = '80:80',
+  $host_name = 'apldc1vds0044.fgv.br',
+  $project_key = '42eec18ffdbffc9fda6110dcc705d6ce',
+  $env = 'prod',
+  $db_name = 'fusio',
+  $db_user = 'fusio',
+  $db_pw = '61ad6c605975',
+  $db_host = 'mysql_fusio',
+  $backend_user = 'demo',
+  $backend_email = 'demo@fusio-project.org',
+  $backend_pw = '75dafcb12c4f',
+  $mysql_root_pw = '7f3e5186032a',
+  $mysql_user = 'fusio',
+  $mysql_password = '61ad6c605975',
+  $mysql_database = 'fusio'
 
   ){
 
@@ -82,9 +96,24 @@ class dockerapp_fusio  (
  
   file {"${conf_configdir}/docker-composer.yml":
     content => epp('dockerapp_fusio/docker-composer.yml.epp', { 
-      'version' => $version, 
-      'ports' => $ports, 
-      'data_dir' => $conf_datadir,  }),
+      'version'        => $version, 
+      'ports'          => $ports, 
+      'data_dir'       => $conf_datadir,
+      'host'           => $host_name,
+      'project_key'    => $project_key,
+      'env'            => $env ,
+      'db_name'        => $db_name ,
+      'db_user'        => $db_user ,
+      'db_pw'          => $db_pw ,
+      'db_host'        => $db_host ,
+      'backend_user'   => $backend_user ,
+      'backend_email'  => $backend_email ,
+      'backend_pw'     => $backend_pw ,
+      'mysql_root_pw'  => $mysql_root_pw ,
+      'mysql_user'     => $mysql_user ,
+      'mysql_password' => $mysql_password ,
+      'mysql_database' => $mysql_database ,
+        }),
     require => File[$conf_configdir],
     notify  => Docker_compose["dk_${service_name}"],
   }
