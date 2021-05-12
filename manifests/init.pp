@@ -201,6 +201,12 @@ class dockerapp_fusio  (
       owner   => $dir_owner,
       group   => $dir_group,
     }
+    ->file{ "${conf_configdir}/apache/socache_shmcb.load":
+      ensure  => file,
+      source => 'puppet:///modules/dockerapp_fusio/apache/socache_shmcb.load',
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
     file{ "${conf_configdir}/certs":
       ensure  => directory,
       require => File[$conf_configdir],
