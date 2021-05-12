@@ -24,3 +24,13 @@ customphp dir
 www-data ownership on the apps dir
 
 **Known Issues**
+
+## Release 1.1.1
+
+**Features**
+Backup dir
+SSL support
+
+**Bugfixes**
+
+**Known Issues**
