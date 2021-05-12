@@ -68,7 +68,6 @@
 # [*ssl_cert*]
 #   ssl key
 #
-class doc
 class dockerapp_fusio  (
   $service_name = 'fusio',
   $version = 'latest',
