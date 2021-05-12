@@ -185,7 +185,7 @@ class dockerapp_fusio  (
     }
     ->file{ "${conf_configdir}/apache/default-ssl.conf":
       ensure  => file,
-      source => 'puppet:///modules/dockerapp_fusio/default-ssl.conf',
+      source => 'puppet:///modules/dockerapp_fusio/apache/default-ssl.conf',
       owner   => $dir_owner,
       group   => $dir_group,
     }
