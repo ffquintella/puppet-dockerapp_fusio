@@ -1,11 +1,12 @@
 {
   "name": "ffquintella-dockerapp_fusio",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Felipe Quintella",
   "summary": "Installs the fusio api gateway with docker",
   "license": "MIT",
   "source": "https://github.com/ffquintella/puppet-dockerapp_fusio",
   "project_page": "https://github.com/ffquintella/puppet-dockerapp_fusio",
+  "issues_url": "https://github.com/ffquintella/puppet-dockerapp_fusio/issues",
   "dependencies": [
 
   ],
