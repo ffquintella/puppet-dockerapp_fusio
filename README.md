@@ -19,15 +19,15 @@ Just call the class and pass the parameters
 in yml this would be:
 
 ```yaml
-dockerapp_fusio::host_name: apldc1vds0044.fgv.br
+dockerapp_fusio::host_name: xxx.xx.br
 dockerapp_fusio::env: develop
-dockerapp_fusio::project_key: jhkgsdWw478cgCj62Cjdgz31Z0mvDS74
-dockerapp_fusio::db_pw: kslkujsd7xjS865mnf29x
+dockerapp_fusio::project_key: xxxx
+dockerapp_fusio::db_pw: JSDHSD
 dockerapp_fusio::backend_user: admin
-dockerapp_fusio::backend_email: seguranca-info@fgv.br
-dockerapp_fusio::backend_pw: kkhXh9gsCg51sxm
-dockerapp_fusio::mysql_password: kslkujsd7xjS865mnf29x
-dockerapp_fusio::mysql_root_pw: kljs7Xhsgz86237
+dockerapp_fusio::backend_email: no@mail.com
+dockerapp_fusio::backend_pw: xcxcxc
+dockerapp_fusio::mysql_password: xcxcxc
+dockerapp_fusio::mysql_root_pw: xcxcxc
 ```
 
 
