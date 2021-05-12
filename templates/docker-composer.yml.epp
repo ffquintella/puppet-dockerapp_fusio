@@ -20,6 +20,7 @@
         String $data_dir,
         String $conf_configdir,
         String $scriptsdir,
+        String $conf_logdir
 | -%>
 version: '3'
 services:
@@ -58,8 +59,10 @@ services:
 <% } -%> 
     volumes:
       - <%= $data_dir %>/public/apps:/var/www/html/fusio/public/apps
+      - <%= $data_dir %>/bck:/bck
       - <%= $data_dir %>/public/customphp:/var/www/html/fusio/public/customphp
       - <%= $scriptsdir %>:/scripts
+      - <%= $conf_logdir %>:/logs
 <% if $use_ssl { -%>
       - <%= $conf_configdir %>/apache/default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
       - <%= $conf_configdir %>/certs/fusio.pem:/etc/ssl/certs/fusio.pem

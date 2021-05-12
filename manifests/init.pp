@@ -153,6 +153,12 @@ class dockerapp_fusio  (
     }
   }
 
+  file{ "${conf_datadir}/bck":
+    ensure  => directory,
+    require => File[$conf_datadir],
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
   file{ "${conf_datadir}/public":
     ensure  => directory,
     require => File[$conf_datadir],
@@ -226,7 +232,8 @@ class dockerapp_fusio  (
       'mysql_database' => $mysql_database ,
       'use_bundled_db' => $use_bundled_db,
       'use_ssl'        => $use_ssl,
-      'conf_configdir' => $conf_configdir
+      'conf_configdir' => $conf_configdir,
+      'conf_logdir'    => $conf_logdir
         }),
     require => File[$conf_configdir],
     notify  => Docker_compose["dk_${service_name}"],
