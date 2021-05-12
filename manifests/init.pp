@@ -189,6 +189,18 @@ class dockerapp_fusio  (
       owner   => $dir_owner,
       group   => $dir_group,
     }
+    ->file{ "${conf_configdir}/apache/ssl.conf":
+      ensure  => file,
+      source => 'puppet:///modules/dockerapp_fusio/apache/ssl.conf',
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
+    ->file{ "${conf_configdir}/apache/ssl.load":
+      ensure  => file,
+      source => 'puppet:///modules/dockerapp_fusio/apache/ssl.load',
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
     file{ "${conf_configdir}/certs":
       ensure  => directory,
       require => File[$conf_configdir],

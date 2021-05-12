@@ -65,6 +65,8 @@ services:
       - <%= $conf_logdir %>:/logs
 <% if $use_ssl { -%>
       - <%= $conf_configdir %>/apache/default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
+      - <%= $conf_configdir %>/apache/ssl.load:/etc/apache2/mods-enabled/ssl.load
+      - <%= $conf_configdir %>/apache/ssl.conf:/etc/apache2/mods-enabled/ssl.conf 
       - <%= $conf_configdir %>/certs/fusio.pem:/etc/ssl/certs/fusio.pem
       - <%= $conf_configdir %>/certs/fusio.key:/etc/ssl/private/fusio.key 
 <% } -%>  
