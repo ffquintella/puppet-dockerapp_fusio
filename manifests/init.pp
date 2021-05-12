@@ -207,7 +207,7 @@ class dockerapp_fusio  (
     content => epp('dockerapp_fusio/docker-composer.yml.epp', { 
       'version'        => $version, 
       'ports'          => $ports, 
-      'ssl_ports'      => $ssl_ports
+      'ssl_ports'      => $ssl_ports,
       'data_dir'       => $conf_datadir,
       'scriptsdir'     => $conf_scriptsdir,
       'host'           => $host_name,
