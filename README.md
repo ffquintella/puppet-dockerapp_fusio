@@ -10,11 +10,25 @@ This module installs the tyk api gateway using puppet and docker
 
 ### Beginning with dockerapp_fusio
 
-This module is not ready yet. DO NOT USE
+This is the first realease expect bugs.
 
 ## Usage
 
-Not written yet
+Just call the class and pass the parameters 
+
+in yml this would be:
+
+```yaml
+dockerapp_fusio::host_name: xxx.xx.br
+dockerapp_fusio::env: develop
+dockerapp_fusio::project_key: xxxx
+dockerapp_fusio::db_pw: JSDHSD
+dockerapp_fusio::backend_user: admin
+dockerapp_fusio::backend_email: no@mail.com
+dockerapp_fusio::backend_pw: xcxcxc
+dockerapp_fusio::mysql_password: xcxcxc
+dockerapp_fusio::mysql_root_pw: xcxcxc
+```
 
 
 ## Development

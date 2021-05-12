@@ -1,5 +1,6 @@
 <%- |   String $version = '2.0.0',
         String $ports = '8080:8080',
+        String $ssl_ports = '8443:8443',
         String $project_key = '42eec18ffdbffc9fda6110dcc705d6ce',
         String $host = 'acme.com',
         String $env = 'prod',
@@ -14,16 +15,26 @@
         String $mysql_user = 'fusio',
         String $mysql_password = '61ad6c605975',
         String $mysql_database = 'fusio',
+        Boolean $use_bundled_db = true,
+        Boolean $use_ssl = false,
         String $data_dir,
+        String $conf_configdir,
+        String $scriptsdir,
+        String $conf_logdir
 | -%>
 version: '3'
 services:
   # Fusio container
   fusio:
-    image: fusio/fusio:v<%= $version %>
+    image: fusio/fusio:<%= $version %>
     environment:
       FUSIO_PROJECT_KEY: "<%= $project_key %>"
       FUSIO_HOST: "<%= $host %>"
+<% if $use_ssl { -%>
+      FUSIO_URL: "https://<%= $host %>"
+<% } else { -%>
+      FUSIO_URL: "http://<%= $host %>"
+<% } -%>
       FUSIO_ENV: "<%= $env %>"
       FUSIO_DB_NAME: "<%= $db_name %>"
       FUSIO_DB_USER: "<%= $db_user %>"
@@ -41,22 +52,42 @@ services:
       PROVIDER_GITHUB_SECRET: ""
       RECAPTCHA_KEY: ""
       RECAPTCHA_SECRET: ""
+<% if $use_bundled_db { -%>
     links:
       - mysql_fusio
+<% } -%>
     ports:
       - "<%= $ports %>"
+<% if $use_ssl { -%>
+      - "<%= $ssl_ports %>"
+<% } -%> 
     volumes:
-      - <%= $data_dir %>/public:/var/www/html/fusio/public
+      - <%= $data_dir %>/public/apps:/var/www/html/fusio/public/apps
+      - <%= $data_dir %>/bck:/bck
+      - <%= $data_dir %>/public/customphp:/var/www/html/fusio/public/customphp
+      - <%= $scriptsdir %>:/scripts
+      - <%= $conf_logdir %>:/logs
+<% if $use_ssl { -%>
+      - <%= $conf_configdir %>/apache/default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
+      - <%= $conf_configdir %>/apache/ssl.load:/etc/apache2/mods-enabled/ssl.load
+      - <%= $conf_configdir %>/apache/ssl.conf:/etc/apache2/mods-enabled/ssl.conf
+      - <%= $conf_configdir %>/apache/socache_shmcb.load:/etc/apache2/mods-enabled/socache_shmcb.load
+      - <%= $conf_configdir %>/certs/fusio.pem:/etc/ssl/certs/fusio.pem
+      - <%= $conf_configdir %>/certs/fusio.key:/etc/ssl/private/fusio.key
+<% } -%>  
 
+<% if $use_bundled_db { -%>
   # Fusio system database
   mysql_fusio:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: "<%= $mysql_root_pw %>"
+      MYSQL_ROOT_HOST: '%'
       MYSQL_USER: "<%= $mysql_user %>"
+      MYSQL_USER_HOST: '%'
       MYSQL_PASSWORD: "<%= $mysql_password %>"
       MYSQL_DATABASE: "<%= $mysql_database %>"
     volumes:
       - <%= $data_dir %>/db:/var/lib/mysql
-
+<% } -%>

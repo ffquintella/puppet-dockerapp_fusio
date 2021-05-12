@@ -11,14 +11,72 @@
 # [*ports*]
 #   Ports to be used by the app
 #
-
+# [*version*]
+#   The version of the image
+#
+# [*host_name*]
+#   Hostname of the server
+#
+# [*project_key*]
+#   Change for random value
+#
+# [*env*]
+#   Environment
+#
+# [*use_bundled_db*]
+#   If it is to use the included mysql db
+#
+# [*db_name*]
+#   database name
+#
+# [*db_user*]
+#   database name
+#
+# [*db_pw*]
+#   database password
+#
+# [*db_host*]
+#   database host
+#
+# [*backend_user*]
+#   backend user to create
+#
+# [*backend_email*]
+#   backend user e-mail
+#
+# [*backend_pw*]
+#   backend user default password (you can change it latter)
+#
+# [*mysql_root_pw*]
+#   bundled mysql root password (only used if use_bundled_db = true)
+#
+# [*mysql_user*]
+#   bundled mysql app user (only used if use_bundled_db = true)
+#
+# [*mysql_password*]
+#   bundled mysql app user password (only used if use_bundled_db = true)
+#
+# [*mysql_database*]
+#   bundled mysql app user database (only used if use_bundled_db = true)
+#
+# [*use_ssl*]
+#   where to enable https 
+#
+# [*ssl_key*]
+#   ssl cert
+#
+# [*ssl_cert*]
+#   ssl key
+#
 class dockerapp_fusio  (
   $service_name = 'fusio',
-  $version = '2.0.0',
+  $version = 'latest',
   $ports = '80:80',
+  $ssl_ports = '443:443',
   $host_name = 'apldc1vds0044.fgv.br',
   $project_key = '42eec18ffdbffc9fda6110dcc705d6ce',
   $env = 'prod',
+  $use_bundled_db = true,
   $db_name = 'fusio',
   $db_user = 'fusio',
   $db_pw = '61ad6c605975',
@@ -29,14 +87,16 @@ class dockerapp_fusio  (
   $mysql_root_pw = '7f3e5186032a',
   $mysql_user = 'fusio',
   $mysql_password = '61ad6c605975',
-  $mysql_database = 'fusio'
-
+  $mysql_database = 'fusio',
+  $use_ssl = false,
+  $ssl_cert = '',
+  $ssl_key = ''
   ){
 
   include 'dockerapp'
 
-  $dir_owner = 0
-  $dir_group = 0
+  $dir_owner = 33
+  $dir_group = 33
 
   $data_dir = $::dockerapp::params::data_dir
   $config_dir = $::dockerapp::params::config_dir
@@ -93,12 +153,87 @@ class dockerapp_fusio  (
     }
   }
 
- 
+  file{ "${conf_datadir}/bck":
+    ensure  => directory,
+    require => File[$conf_datadir],
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
+  file{ "${conf_datadir}/public":
+    ensure  => directory,
+    require => File[$conf_datadir],
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
+  ->file{ "${conf_datadir}/public/apps":
+    ensure  => directory,
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
+  ->file{ "${conf_datadir}/public/customphp":
+    ensure  => directory,
+    owner   => $dir_owner,
+    group   => $dir_group,
+  }
+
+  if($use_ssl) {
+    file{ "${conf_configdir}/apache":
+      ensure  => directory,
+      require => File[$conf_configdir],
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
+    ->file{ "${conf_configdir}/apache/default-ssl.conf":
+      ensure  => file,
+      source => 'puppet:///modules/dockerapp_fusio/apache/default-ssl.conf',
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
+    ->file{ "${conf_configdir}/apache/ssl.conf":
+      ensure  => file,
+      source => 'puppet:///modules/dockerapp_fusio/apache/ssl.conf',
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
+    ->file{ "${conf_configdir}/apache/ssl.load":
+      ensure  => file,
+      source => 'puppet:///modules/dockerapp_fusio/apache/ssl.load',
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
+    ->file{ "${conf_configdir}/apache/socache_shmcb.load":
+      ensure  => file,
+      source => 'puppet:///modules/dockerapp_fusio/apache/socache_shmcb.load',
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
+    file{ "${conf_configdir}/certs":
+      ensure  => directory,
+      require => File[$conf_configdir],
+      owner   => $dir_owner,
+      group   => $dir_group,
+    }
+    ->file{ "${conf_configdir}/certs/fusio.pem":
+      ensure  => file,
+      owner   => $dir_owner,
+      group   => $dir_group,
+      content => $ssl_cert
+    }
+    ->file{ "${conf_configdir}/certs/fusio.key":
+      ensure  => file,
+      owner   => $dir_owner,
+      group   => $dir_group,
+      content => $ssl_key
+    }
+  }
+
   file {"${conf_configdir}/docker-composer.yml":
     content => epp('dockerapp_fusio/docker-composer.yml.epp', { 
       'version'        => $version, 
       'ports'          => $ports, 
+      'ssl_ports'      => $ssl_ports,
       'data_dir'       => $conf_datadir,
+      'scriptsdir'     => $conf_scriptsdir,
       'host'           => $host_name,
       'project_key'    => $project_key,
       'env'            => $env ,
@@ -113,6 +248,10 @@ class dockerapp_fusio  (
       'mysql_user'     => $mysql_user ,
       'mysql_password' => $mysql_password ,
       'mysql_database' => $mysql_database ,
+      'use_bundled_db' => $use_bundled_db,
+      'use_ssl'        => $use_ssl,
+      'conf_configdir' => $conf_configdir,
+      'conf_logdir'    => $conf_logdir
         }),
     require => File[$conf_configdir],
     notify  => Docker_compose["dk_${service_name}"],
