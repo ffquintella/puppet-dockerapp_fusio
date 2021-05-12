@@ -87,7 +87,7 @@ class dockerapp_fusio  (
   $mysql_root_pw = '7f3e5186032a',
   $mysql_user = 'fusio',
   $mysql_password = '61ad6c605975',
-  $mysql_database = 'fusio'
+  $mysql_database = 'fusio',
   $use_ssl = false,
   $ssl_cert = '',
   $ssl_key = ''
